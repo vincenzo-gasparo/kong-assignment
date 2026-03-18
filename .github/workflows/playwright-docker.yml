@@ -1,0 +1,47 @@
+# Runs Playwright E2E tests against Kong Manager inside Docker.
+#
+# Uses the official Playwright Docker image (browsers pre-installed)
+# so there is no need for `npx playwright install` in CI.
+#
+# Flow:
+#   1. Start Kong + Postgres via Docker Compose (waits for healthcheck)
+#   2. Install npm dependencies inside the Playwright container
+#   3. Run tests (host network mode — same localhost access as local dev)
+#   4. Upload HTML report as artifact
+#   5. Tear down all containers and volumes
+name: Playwright Tests (Docker)
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Kong healthcheck ensures the gateway is ready before tests start
+      - name: Start services and wait for healthy
+        run: docker compose up -d --wait
+
+      # Install into bind-mounted node_modules (--no-deps skips starting Kong again)
+      - name: Install dependencies
+        run: docker compose run --rm --no-deps playwright npm ci
+
+      - name: Run Playwright tests
+        run: docker compose run --rm playwright
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Stop services
+        if: always()
+        run: docker compose down -v
