@@ -1,6 +1,7 @@
 version: '3.9'
 volumes:
   kong_db_data: {}
+  playwright_node_modules: {}
 networks:
   kong-ee-net:
     driver: bridge
@@ -62,3 +63,38 @@ services:
       - '8002:8002'
       - '8443:8443'
       - '8444:8444'
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+
+  #######################################
+  # Playwright Test Runner
+  # Uses the official Playwright Docker image with pre-installed browsers,
+  # eliminating the need for `npx playwright install`.
+  # Host network mode avoids CORS issues by accessing Kong via localhost.
+  # Gated behind the "test" profile so it doesn't start with `docker compose up`.
+  # Usage:
+  #   docker compose run --rm --no-deps playwright npm ci   # install deps (once)
+  #   docker compose run --rm playwright                     # run tests
+  #######################################
+
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.58.2-noble
+    container_name: playwright
+    working_dir: /app
+    volumes:
+      - .:/app
+      - playwright_node_modules:/app/node_modules
+    network_mode: host
+    environment:
+      CI: 'true'
+      BASE_URL: http://localhost:8002
+      KONG_ADMIN_URL: http://localhost:8001
+    depends_on:
+      kong-cp:
+        condition: service_healthy
+    command: npx playwright test
+    profiles:
+      - test
