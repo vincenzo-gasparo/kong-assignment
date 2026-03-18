@@ -1,28 +1,45 @@
+/**
+ * Playwright configuration for Kong Manager E2E tests.
+ *
+ * Projects run in sequence: setup -> chromium (main tests) -> teardown.
+ * Setup cleans existing data and verifies the UI is accessible.
+ * Teardown removes all services and routes created during the run.
+ *
+ * Environment variables:
+ *   BASE_URL  - Kong Manager UI URL (default: http://localhost:8002)
+ *   CI        - Enables headless mode and forbids .only
+ */
 import { defineConfig, devices } from "@playwright/test";
+import { vars } from "./src/data";
 
 export default defineConfig({
 	testDir: "./tests",
 	fullyParallel: true,
-	forbidOnly: !!process.env.CI,
+	forbidOnly: !!vars.CI,
 	retries: 0,
-	workers: process.env.CI ? 4 : 1,
+	workers: vars.CI ? 4 : 1,
 	reporter: [["html", { open: "never" }], ["list"]],
 	use: {
-		headless: !!process.env.CI,
+		headless: !!vars.CI,
 		trace: "retain-on-failure",
 		screenshot: "only-on-failure",
-		baseURL: process.env.BASE_URL || "http://localhost:8002",
+		baseURL: vars.BASE_URL || "http://localhost:8002",
 		...devices["Desktop Chrome"],
 	},
 	projects: [
 		{
 			name: "setup",
 			testDir: "./setup",
+			teardown: "teardown",
 		},
 		{
 			name: "chromium",
 			use: { ...devices["Desktop Chrome"] },
 			dependencies: ["setup"],
+		},
+		{
+			name: "teardown",
+			testDir: "./teardown",
 		},
 	],
 });
