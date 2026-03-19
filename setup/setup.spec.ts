@@ -1,12 +1,6 @@
 import assert from "node:assert";
 import { expect } from "@playwright/test";
 import { test } from "../src/fixtures";
-import { deleteAll } from "../src/utils";
-
-test.beforeAll(async ({ request }) => {
-	await deleteAll(request, "routes");
-	await deleteAll(request, "services");
-});
 
 test("should verify web ui is running", async ({ workspacePage, page }) => {
 	const response = await page.goto("/");
