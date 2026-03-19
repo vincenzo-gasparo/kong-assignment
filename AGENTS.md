@@ -10,9 +10,9 @@ Playwright E2E test suite for Kong Gateway Manager UI. Tests run against a local
 
 - **Test framework**: Playwright (`@playwright/test` 1.58.2)
 - **Language**: TypeScript (Node 22, `noEmit` — no build step)
-- **Linter/Formatter**: Biome (tabs, double quotes, 120 char line width)
+- **Linter/Formatter**: Biome 2.x (tabs, double quotes, 120 char line width, auto-organized imports via `organizeImports` assist)
 - **Infrastructure**: Docker Compose (Postgres + Kong Gateway + Playwright container with `node_modules` isolated via named volume)
-- **CI**: GitHub Actions
+- **CI**: GitHub Actions (parallel lint + test jobs)
 
 ## Code Conventions
 
@@ -21,7 +21,8 @@ Playwright E2E test suite for Kong Gateway Manager UI. Tests run against a local
 - Use tabs for indentation
 - Use double quotes for strings
 - Line width limit: 120 characters
-- Run `npx biome check .` before committing — CI enforces this
+- Imports are auto-organized by Biome (`organizeImports` assist rule) — no manual sorting needed
+- Run `npx biome check .` before committing — CI enforces this via a dedicated lint job
 
 ### TypeScript
 
@@ -35,7 +36,7 @@ Playwright E2E test suite for Kong Gateway Manager UI. Tests run against a local
 - **Fixtures**: defined in `src/fixtures.ts` using `base.extend<{}>()`. Fixtures handle setup/teardown of test data (create before, delete after).
 - **Test steps**: use `test.step("description", async () => { ... })` to group related actions within a test for clearer reporting and debugging.
 - **Data cleanup**: tests must clean up resources they create. Use `afterEach` hooks or fixture teardown to delete services/routes via the Admin API.
-- **Test IDs**: use `buildId()` from `src/utils.ts` to generate unique, timestamped names for entities.
+- **Test IDs**: use `buildId()` from `src/utils.ts` to generate unique, timestamped names for entities (format: `test-yyyyMMddHHmmssSSS`).
 - **API interactions**: use Playwright's `request` context (from fixtures) with helpers in `src/utils.ts`. All Admin API calls go through the centralized `vars.KONG` base URL.
 - **Selectors**: prefer `data-testid` attributes via `page.getByTestId()`. Fall back to `page.getByRole()` or `page.locator()` when test IDs aren't available.
 

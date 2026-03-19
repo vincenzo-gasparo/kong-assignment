@@ -103,8 +103,11 @@ All environment variables are centralized in [`src/data.ts`](src/data.ts) and lo
 
 ## CI
 
-The GitHub Actions workflow ([playwright-docker.yml](.github/workflows/playwright-docker.yml)) runs on push/PR to `main`:
+The GitHub Actions workflow ([playwright-docker.yml](.github/workflows/playwright-docker.yml)) runs on push/PR to `main` and on manual dispatch. It runs two jobs in parallel:
 
+**Lint** — Runs Biome lint and format checks using the official `biomejs/setup-biome` action (no `npm install` needed).
+
+**Test**:
 1. Starts Kong via Docker Compose (waits for healthcheck)
 2. Installs npm dependencies inside the Playwright container (isolated `node_modules` via named volume to avoid platform binary conflicts and persist across steps)
 3. Runs tests using the pre-built Playwright Docker image (no browser install step)
@@ -114,4 +117,5 @@ The GitHub Actions workflow ([playwright-docker.yml](.github/workflows/playwrigh
 
 - **Page objects** are factory functions with explicit return types, dedicated locator types, and JSDoc on all methods
 - **Tests** use `test.step()` to group logical phases (navigate, fill form, submit, verify) for clear reporting
+- **Imports** are auto-organized by Biome (`organizeImports` assist rule)
 - See [AGENTS.md](AGENTS.md) for full coding conventions

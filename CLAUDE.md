@@ -18,4 +18,5 @@ Read [AGENTS.md](AGENTS.md) for full project context, conventions, and patterns.
 - Use `page.getByTestId()` as the preferred selector strategy
 - Page objects are factory functions, not classes — with explicit return types, locator types, and JSDoc on all methods
 - Wrap logical phases in tests with `test.step()` for clear reporting
+- Imports are auto-organized by Biome — no manual sorting needed
 - Run `npx biome check .` before committing
