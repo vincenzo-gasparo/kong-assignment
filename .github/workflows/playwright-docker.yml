@@ -18,6 +18,16 @@ on:
     branches: [main, master]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Run Biome lint and format check
+        uses: biomejs/setup-biome@v2
+
+      - run: biome check .
+
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
