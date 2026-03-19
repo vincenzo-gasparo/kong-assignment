@@ -38,6 +38,7 @@ export const createRouteFormPage = (page: Page) => {
 		formSubmitButton: page.getByTestId("route-create-form-submit"),
 		viewConfigurationButton: page.getByTestId("route-create-form-view-configuration"),
 		copyButtonJsonCodeBlock: page.getByTestId("code-block-copy-button-json-codeblock"),
+		cancelButton: page.getByTestId("route-create-form-cancel"),
 	};
 
 	/** Fills multiple path inputs, adding new input rows as needed. */
