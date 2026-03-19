@@ -36,6 +36,8 @@ export const createRouteFormPage = (page: Page) => {
 		responseBufferingCheckbox: page.getByTestId("route-form-response-buffering"),
 		snisInput: page.locator('[data-testid^="route-form-snis-input-"]'),
 		formSubmitButton: page.getByTestId("route-create-form-submit"),
+		viewConfigurationButton: page.getByTestId("route-create-form-view-configuration"),
+		copyButtonJsonCodeBlock: page.getByTestId("code-block-copy-button-json-codeblock"),
 	};
 
 	/** Fills multiple path inputs, adding new input rows as needed. */
