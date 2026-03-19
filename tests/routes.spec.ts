@@ -73,3 +73,42 @@ for (const data of [
 		});
 	});
 }
+
+test("view configuration of an empty route should show the default values", async ({
+	page,
+	routeFormPage,
+	service,
+}) => {
+	await test.step("navigate to route creation page", async () => {
+		await page.goto(`/default/routes/create?serviceId=${service.id}`);
+	});
+	await test.step("open view configuration and copy JSON", async () => {
+		await routeFormPage.locators.viewConfigurationButton.click();
+		await routeFormPage.locators.copyButtonJsonCodeBlock.click();
+	});
+
+	await test.step("verify default route configuration values", async () => {
+		const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
+		const json = JSON.parse(clipboardText);
+		expect(json).toHaveProperty("service.id");
+		expect(json).toMatchObject({
+			name: null,
+			protocols: ["http", "https"],
+			tags: [],
+			https_redirect_status_code: 426,
+			strip_path: true,
+			preserve_host: false,
+			request_buffering: true,
+			response_buffering: true,
+			methods: null,
+			hosts: null,
+			paths: null,
+			headers: null,
+			regex_priority: 0,
+			path_handling: "v0",
+			sources: null,
+			destinations: null,
+			snis: null,
+		});
+	});
+});
