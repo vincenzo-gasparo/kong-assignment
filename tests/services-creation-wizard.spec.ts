@@ -20,7 +20,7 @@ for (const data of [
 			await page.goto("/default/services/create");
 		});
 
-		await test.step("fill in the service form", async () => {
+		await test.step("fill in the service form and verify save button is enabled", async () => {
 			await gatewayServiceFormPage.fillGatewayServiceForm(data);
 			await expect(gatewayServiceFormPage.locators.saveServiceButton).toBeEnabled();
 		});

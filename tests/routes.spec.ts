@@ -43,7 +43,7 @@ for (const data of [
 		service,
 		createdRouteIds,
 	}) => {
-		await test.step("navigate to service detail page", async () => {
+		await test.step("navigate to service detail page and verify it loads", async () => {
 			await page.goto(`/default/services/${service.id}`);
 			await expect(page.locator("h3", { hasText: service.name })).toBeVisible();
 		});
@@ -87,7 +87,7 @@ test("view configuration of an empty route should show the default values", asyn
 		await routeFormPage.locators.copyButtonJsonCodeBlock.click();
 	});
 
-	await test.step("verify default route configuration values", async () => {
+	await test.step("verify default route JSON values", async () => {
 		const clipboardText = await page.evaluate(() => navigator.clipboard.readText());
 		const json = JSON.parse(clipboardText);
 		expect(json).toHaveProperty("service.id");
@@ -110,5 +110,16 @@ test("view configuration of an empty route should show the default values", asyn
 			destinations: null,
 			snis: null,
 		});
+	});
+});
+
+test("clicking cancel button should navigate to route list page", async ({ page, routeFormPage }) => {
+	await test.step("navigate to route creation page", async () => {
+		await page.goto("/default/routes/create");
+	});
+
+	await test.step("click cancel button and verify navigation", async () => {
+		await routeFormPage.locators.cancelButton.click();
+		await expect(page).toHaveURL("/default/routes");
 	});
 });
