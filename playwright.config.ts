@@ -24,6 +24,7 @@ export default defineConfig({
 		trace: "retain-on-failure",
 		screenshot: "only-on-failure",
 		baseURL: vars.BASE_URL || "http://localhost:8002",
+		permissions: ["clipboard-read", "clipboard-write"],
 		...devices["Desktop Chrome"],
 	},
 	projects: [
