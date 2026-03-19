@@ -19,9 +19,10 @@ export default defineConfig({
 	retries: 0,
 	workers: vars.CI ? 4 : 1,
 	reporter: [["html", { open: "never" }], ["list"]],
+	snapshotDir: "./snapshots",
 	use: {
 		headless: !!vars.CI,
-		trace: "retain-on-failure",
+		trace: "on", // Usually retain-on-failure, on for academic purposes
 		screenshot: "only-on-failure",
 		baseURL: vars.BASE_URL || "http://localhost:8002",
 		permissions: ["clipboard-read", "clipboard-write"],
