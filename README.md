@@ -53,7 +53,7 @@ docker-compose.yml
 │   ├── types.ts             # TypeScript types for Kong entities
 │   ├── data.ts              # Centralized environment configuration (dotenv)
 │   └── pages/
-│       ├── kong-workspaces.page.ts       # Workspace page object (locators + types)
+│       ├── kong-workspaces.ts             # Workspace page object (locators + types)
 │       ├── kong-gateway-service-form.ts  # Service form page object (fill, select protocol)
 │       └── kong-route-form.ts            # Route form page object (basic & advanced config)
 ├── setup/

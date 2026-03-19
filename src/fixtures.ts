@@ -9,7 +9,7 @@
 import { test as base } from "@playwright/test";
 import { createGatewayServiceFormPage, type GatewayServiceFormPage } from "./pages/kong-gateway-service-form";
 import { createRouteFormPage, type RouteFormPage } from "./pages/kong-route-form";
-import { createWorkspacePage, type WorkspacePage } from "./pages/kong-workspaces.page";
+import { createWorkspacePage, type WorkspacePage } from "./pages/kong-workspaces";
 import type { CreateServiceData } from "./types";
 import { buildId, createService, deleteRoute, deleteService } from "./utils";
 

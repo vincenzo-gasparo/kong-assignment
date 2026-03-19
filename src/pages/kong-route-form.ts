@@ -165,6 +165,7 @@ export const createRouteFormPage = (page: Page) => {
 		fillPaths,
 		fillHosts,
 		fillHeaders,
+		fillSnis,
 		selectProtocol,
 		fillMethods,
 		fillRouteForm,
