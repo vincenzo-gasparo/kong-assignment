@@ -14,10 +14,18 @@ test("should show add a gateway service button with no services", async ({
 	gatewayServiceFormPage,
 	page,
 }) => {
-	await workspacePage.page.goto("/");
-	await workspacePage.locators.workspaceLinkDefault.click();
-	await expect(workspacePage.locators.addGatewayServiceButton).toBeVisible();
-	await workspacePage.locators.addGatewayServiceButton.click();
-	await expect(gatewayServiceFormPage.locators.saveServiceButton).toBeDisabled();
-	await expect(page).toHaveURL(/\/default\/services\/create\?cta=new-user$/);
+	await test.step("navigate to default workspace", async () => {
+		await workspacePage.page.goto("/");
+		await workspacePage.locators.workspaceLinkDefault.click();
+	});
+
+	await test.step("verify add gateway service button is visible and click it", async () => {
+		await expect(workspacePage.locators.addGatewayServiceButton).toBeVisible();
+		await workspacePage.locators.addGatewayServiceButton.click();
+	});
+
+	await test.step("verify service creation page loads with save button disabled", async () => {
+		await expect(gatewayServiceFormPage.locators.saveServiceButton).toBeDisabled();
+		await expect(page).toHaveURL(/\/default\/services\/create\?cta=new-user$/);
+	});
 });
