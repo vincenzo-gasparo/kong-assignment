@@ -59,7 +59,7 @@ docker-compose.yml
 ├── setup/
 │   └── setup.spec.ts        # Pre-suite: cleans existing data, verifies UI is running
 ├── tests/
-│   ├── services-creation-wizard.spec.ts  # Service creation tests (full URL & split parts)
+│   ├── services.spec.ts                  # Service creation tests (full URL & split parts)
 │   └── routes.spec.ts                    # Route creation tests (basic & advanced config)
 ├── teardown/
 │   └── teardown.spec.ts     # Post-suite: removes all created routes and services
